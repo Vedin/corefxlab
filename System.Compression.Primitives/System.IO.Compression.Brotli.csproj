@@ -8,6 +8,7 @@
     <Copyright>Microsoft Corporation, All rights reserved.</Copyright>
     <TargetFramework>netstandard1.4</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
     <ApplicationIcon />
     <OutputTypeEx>library</OutputTypeEx>
     <StartupObject />

@@ -7,11 +7,11 @@ using System.ComponentModel;
 using System.Text;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-
+using System.Security;
 #if BIT64
     using nuint = System.UInt64;
 #else // BIT64
-using nuint = System.UInt32;
+    using nuint = System.UInt32;
 #endif // BIT64
 
 namespace System.IO.Compression
@@ -68,104 +68,104 @@ namespace System.IO.Compression
             NeedsMoreOutput = 3
         };
 
-        [SecurityCrititcal]
-        public sealed class BrotliStreamHandle : SafeHandleMinusOneIsInvalid
-        static bool X86 = IntPtr.Size == 4;
-        #region Encoder
-        public static IntPtr BrotliEncoderCreateInstance()
-        {
-           return Interop.Brotli.BrotliEncoderCreateInstance(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-            
-        }
-
-        public static bool BrotliEncoderSetParameter(IntPtr state, BrotliEncoderParameter param, UInt32 value)
-        {
-            return Interop.Brotli.BrotliEncoderSetParameter(state, param, value);
-        }
-
-        public static void BrotliEncoderSetCustomDictionary(IntPtr state, UInt32 size, IntPtr dict)
-        {
-            Interop.Brotli.BrotliEncoderSetCustomDictionary(state, size, dict);
-        }
-
-        public static bool BrotliEncoderCompressStream(
-            IntPtr state, BrotliEncoderOperation op, ref nuint availableIn,
-            ref IntPtr nextIn, ref nuint availableOut, ref IntPtr nextOut, out nuint totalOut)
-        {
-            return Interop.Brotli.BrotliEncoderCompressStream(state, op, ref availableIn, ref nextIn, ref availableOut, ref nextOut, out totalOut);
-        }
-
-        public static bool BrotliEncoderIsFinished(IntPtr state)
-        {
-            return Interop.Brotli.BrotliEncoderIsFinished(state);
-        }
-
-        public static void BrotliEncoderDestroyInstance(IntPtr state)
-        {
-            Interop.Brotli.BrotliEncoderDestroyInstance(state);
-        }
-
-        public static UInt32 BrotliEncoderVersion()
-        {
-            return Interop.Brotli.BrotliEncoderVersion();
-            
-        }
-        #endregion
-        #region Decoder
-        public static IntPtr BrotliDecoderCreateInstance()
-        {
-            return Interop.Brotli.BrotliDecoderCreateInstance(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
-        }
-
-        public static void BrotliDecoderSetCustomDictionary(IntPtr state, UInt32 size, IntPtr dict)
-        {
-            Interop.Brotli.BrotliDecoderSetCustomDictionary(state, size, dict);
-        }
-
-        public static BrotliDecoderResult BrotliDecoderDecompressStream(
-            IntPtr state, ref nuint availableIn,
-            ref IntPtr nextIn, ref nuint availableOut, ref IntPtr nextOut, out nuint totalOut)
-        {
-            return Interop.Brotli.BrotliDecoderDecompressStream(state, ref availableIn, ref nextIn, ref availableOut, ref nextOut, out totalOut);
-        }
-
-        public static void BrotliDecoderDestroyInstance(IntPtr state)
-        {
-           Interop.Brotli.BrotliDecoderDestroyInstance(state);
-        }
-
-        public static UInt32 BrotliDecoderVersion()
-        {
-            return Interop.Brotli.BrotliDecoderVersion();
-        }
-
-        public static bool BrotliDecoderIsUsed(IntPtr state)
-        {
-            return Interop.Brotli.BrotliDecoderIsUsed(state);
-        }
-
-        public static bool BrotliDecoderIsFinished(IntPtr state)
-        {
-            return Interop.Brotli.BrotliDecoderIsFinished(state);
-        }
-
-        public static Int32 BrotliDecoderGetErrorCode(IntPtr state)
-        {
-           return Interop.Brotli.BrotliDecoderGetErrorCode(state);
-           
-        }
-
-        public static String BrotliDecoderErrorString(Int32 code)
-        {
-            IntPtr result = IntPtr.Zero;
-            result = Interop.Brotli.BrotliDecoderErrorString(code);
-            if (result != IntPtr.Zero)
+                
+            #region Encoder
+            public static IntPtr BrotliEncoderCreateInstance()
             {
-                return Marshal.PtrToStringAnsi(result);
+                return Interop.Brotli.BrotliEncoderCreateInstance(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+
             }
-            return String.Empty;
-        }
-        #endregion
+
+            public static bool BrotliEncoderSetParameter(IntPtr state, BrotliEncoderParameter param, UInt32 value)
+            {
+                return Interop.Brotli.BrotliEncoderSetParameter(state, param, value);
+            }
+
+            public static void BrotliEncoderSetCustomDictionary(IntPtr state, UInt32 size, IntPtr dict)
+            {
+                Interop.Brotli.BrotliEncoderSetCustomDictionary(state, size, dict);
+            }
+
+            public static bool BrotliEncoderCompressStream(
+                IntPtr state, BrotliEncoderOperation op, ref IntPtr availableIn,
+                ref IntPtr nextIn, ref IntPtr availableOut, ref IntPtr nextOut, out nuint totalOut)
+            {
+            bool r=Interop.Brotli.BrotliEncoderCompressStream(state, op, ref availableIn, ref nextIn, ref availableOut, ref nextOut, out totalOut);
+           
+            return r;
+            }
+
+            public static bool BrotliEncoderIsFinished(IntPtr state)
+            {
+                return Interop.Brotli.BrotliEncoderIsFinished(state);
+            }
+
+            public static void BrotliEncoderDestroyInstance(IntPtr state)
+            {
+                Interop.Brotli.BrotliEncoderDestroyInstance(state);
+            }
+
+            public static UInt32 BrotliEncoderVersion()
+            {
+                return Interop.Brotli.BrotliEncoderVersion();
+
+            }
+            #endregion
+            #region Decoder
+            public static IntPtr BrotliDecoderCreateInstance()
+            {
+                return Interop.Brotli.BrotliDecoderCreateInstance(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            }
+
+            public static void BrotliDecoderSetCustomDictionary(IntPtr state, UInt32 size, IntPtr dict)
+            {
+                Interop.Brotli.BrotliDecoderSetCustomDictionary(state, size, dict);
+            }
+
+            public static BrotliDecoderResult BrotliDecoderDecompressStream(
+                IntPtr state, ref IntPtr availableIn,
+                ref IntPtr nextIn, ref IntPtr availableOut, ref IntPtr nextOut, out nuint totalOut)
+            {
+                return Interop.Brotli.BrotliDecoderDecompressStream(state, ref availableIn, ref nextIn, ref availableOut, ref nextOut, out totalOut);
+            }
+
+            public static void BrotliDecoderDestroyInstance(IntPtr state)
+            {
+                Interop.Brotli.BrotliDecoderDestroyInstance(state);
+            }
+
+            public static UInt32 BrotliDecoderVersion()
+            {
+                return Interop.Brotli.BrotliDecoderVersion();
+            }
+
+            public static bool BrotliDecoderIsUsed(IntPtr state)
+            {
+                return Interop.Brotli.BrotliDecoderIsUsed(state);
+            }
+
+            public static bool BrotliDecoderIsFinished(IntPtr state)
+            {
+                return Interop.Brotli.BrotliDecoderIsFinished(state);
+            }
+
+            public static Int32 BrotliDecoderGetErrorCode(IntPtr state)
+            {
+                return Interop.Brotli.BrotliDecoderGetErrorCode(state);
+
+            }
+            public static String BrotliDecoderErrorString(Int32 code)
+            {
+                IntPtr result = IntPtr.Zero;
+                result = Interop.Brotli.BrotliDecoderErrorString(code);
+                if (result != IntPtr.Zero)
+                {
+                    return Marshal.PtrToStringAnsi(result);
+                }
+                return String.Empty;
+            }
+            #endregion
+         
     }
 }
 
