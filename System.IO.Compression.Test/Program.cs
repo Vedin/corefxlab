@@ -17,15 +17,16 @@ namespace System.IO.Compression.Test
                 msInput.CopyTo(bs);
                 bs.Close();
                 output = msOutput.ToArray();
+                File.WriteAllBytes(path_out, output);
             }
-            File.WriteAllBytes(path_out, output);
+            
         }
         static void Decompress(String path_in, String path_out)
         {
             Byte[] input = File.ReadAllBytes(path_in);
             Byte[] output = null;
             using (System.IO.MemoryStream msInput = new System.IO.MemoryStream(input))
-            using (BrotliStream bs = new BrotliStream(msInput, System.IO.Compression.CompressionMode.Decompress))
+            using (BrotliStream bs = new BrotliStream(msInput, System.IO.Compression.CompressionMode.Decompress,false,22,11,1024*1024))
             using (System.IO.MemoryStream msOutput = new System.IO.MemoryStream())
             {
                 bs.CopyTo(msOutput);
@@ -49,8 +50,8 @@ namespace System.IO.Compression.Test
                 output = msOutput.ToArray();
             }*/
             //File.WriteAllBytes(path_out, output);
-            Compress("input.txt", "output.br");
-            Decompress("output.br", "output.txt");
+            Compress("input.png", "output.br");
+            Decompress("output.br", "output.png");
 
 
             Console.WriteLine("Nice end!");
